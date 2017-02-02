@@ -1,38 +1,50 @@
-function create() {
+var bottom = 680;
+var fallingRange = 400;
+var period = 10;
+var boxNum = 1;
+
+
+function createBox() {
     var frag = document.createDocumentFragment(),
         temp = document.createElement('div');
-    temp.innerHTML = '<div id="josko" class="box"></div>';
+    var boxId = "box" + boxNum;
+    boxNum ++;
+    temp.innerHTML = '<div id='+boxId+' class="box"></div>';
     while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
     var my_elem = document.getElementById('insertPoint');
 // You can use native DOM methods to insert the fragment:
     document.body.insertBefore(frag, my_elem);
-}
 
-var bottom = 700;
-var period = 1;
+    var target = document.getElementById(boxId);
+    var x = Math.random();
+    x = fallingRange * x;
+    target.style.left = x +'px';
+    target.style.top = 0 +'px';
 
-
-
-function moveTarget(targetId) {
-    var target = document.getElementById(targetId);
-    var position = target.getBoundingClientRect().top;
-    setInterval(function () {
-        if(position < bottom) {
-        position = position + 4;
-        target.style.top = position +'px';git
-        } else {
-            clearInterval(period)
+    var w = new Worker("worker.js");
+    w.onmessage = function(e) {
+        var target = document.getElementById(e.data);
+        var position = target.style.top;
+        var positionNum = parseInt(position.substring(0, position.length - 2));
+        positionNum = positionNum + 1;
+        // alert(positionNum)
+        target.style.top = positionNum +'px';
+        if(positionNum > 680 ) {
+            w.terminate();
         }
-    },period)
+    };
+    w.postMessage(boxId);
 
+
+    target.onclick = function () {
+        createBox();
+    }
 }
 
+createBox();
 
-
-create();
-moveTarget("josko")
 
 
 
