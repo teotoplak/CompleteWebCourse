@@ -1,7 +1,8 @@
 var bottom = 680;
-var fallingRange = 400;
+var fallingRange = 800;
 var period = 10;
 var boxNum = 1;
+var fail = false;
 
 
 function createBox() {
@@ -21,7 +22,18 @@ function createBox() {
     var x = Math.random();
     x = fallingRange * x;
     target.style.left = x +'px';
-    target.style.top = 0 +'px';
+    target.style.top = -300 +'px';
+
+    target.onclick = function () {
+        if(fail) {
+            return;
+        }
+        target.parentNode.removeChild(target);
+        createBox();
+        if(Math.random() > 0.7) {
+        createBox();
+        }
+    }
 
     var w = new Worker("worker.js");
     w.onmessage = function(e) {
@@ -31,16 +43,17 @@ function createBox() {
         positionNum = positionNum + 1;
         // alert(positionNum)
         target.style.top = positionNum +'px';
-        if(positionNum > 680 ) {
+        if(positionNum > 725 ) {
+            if(!fail) {
+            alert("Trumped! Refresh for one more play :)")
+            }
             w.terminate();
+            fail = true;
         }
     };
     w.postMessage(boxId);
 
 
-    target.onclick = function () {
-        createBox();
-    }
 }
 
 createBox();
