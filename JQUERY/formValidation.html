@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Learning jQuery</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style>
+
+    body {
+      padding: 50px;
+    }
+        #wrapper {
+            width: 500px;
+            margin: 0 auto;
+            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-weight: 300;
+            background-color: rgb(147, 145, 146);
+            border-radius: 20px;
+        }
+
+        input {
+            border-radius: 5px;
+            width: 250px;
+            height: 30px;
+            margin: 10px;
+            font-size: 1em;
+        }
+
+        label {
+            float: left;
+            margin: 10px;
+            width: 120px;
+            clear: both;
+        }
+
+        #submitButton {
+          background-color: rgb(23, 153, 85);
+          font-size: 1em;
+          margin-left: 150px;
+          height: 40px;
+        }
+
+        #error {
+          color: rgb(242, 28, 28);
+          font-weight: bold;
+          margin: 10px 150px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="wrapper">
+
+      <form id="validationForm">
+        <label for="username">Username</label>
+        <input name="username" />
+
+        <label  for="email">Email</label>
+        <input id="email" name="email" />
+
+        <label for="password">Password</label>
+        <input type="password" name="password" />
+
+        <div id="error">
+
+        </div>
+        <input id="submitButton" type="submit" value="Submit">
+      </form>
+    </div>
+
+<script type="text/javascript">
+  $("#validationForm").submit(function(event) {
+    event.preventDefault();
+    function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+    // alert( pattern.test(emailAddress) );
+    return pattern.test(emailAddress);
+};
+    if(!isValidEmailAddress($("#email").val())) {
+      $("#error").text("Wrong email format!");
+    } else {
+        $("#error").text("");
+    }
+  })
+</script>
+
+</body>
+
+</html>
